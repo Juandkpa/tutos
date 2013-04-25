@@ -1,14 +1,13 @@
 package com.worldmediahd.ui;
 
-import com.tutos.dao.BaseDAO;
+import com.tutos.dao.EstudianteDAO;
+import com.tutos.dao.MonitorDAO;
 import com.tutos.dao.PersonaDAO;
 import com.tutos.model.Estudiante;
 import com.tutos.model.Genero;
 import com.tutos.model.Monitor;
-import com.tutos.model.Persona;
 import com.vaadin.ui.VerticalLayout;
 
-import java.awt.Label;
 import java.util.Arrays;
 
 import com.vaadin.data.Item;
@@ -21,7 +20,6 @@ import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
@@ -36,7 +34,9 @@ import com.vaadin.ui.Button.ClickEvent;
 public class RegistroEstudiante extends VerticalLayout{
 
 		private static final long serialVersionUID = 1L;
-//		private BaseDAO<Persona> personaDAO = new BaseDAO<Persona>(); 
+		
+		private EstudianteDAO estudianteDAO = EstudianteDAO.getInstance();
+		private MonitorDAO monitorDAO = MonitorDAO.getInstance(); 
 	    // the 'POJO' we're editing.
 	    // The Person class is imported from the basic form example.
 	    Estudiante estudiante;
@@ -69,6 +69,8 @@ public class RegistroEstudiante extends VerticalLayout{
 	        tipoFormulario.setImmediate(true);
 	        tipoFormulario.addListener(new ValueChangeListener() {
 				
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public void valueChange(ValueChangeEvent event) {
 					if(event.getProperty().getValue().equals(datos[0])){
@@ -86,13 +88,16 @@ public class RegistroEstudiante extends VerticalLayout{
 	        Button aceptar = new Button("Aceptar");
 	        aceptar.addListener(new ClickListener() {
 				
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public void buttonClick(ClickEvent event) {
 					if(tipoFormulario.getValue().equals(datos[0])){
 						estudianteForm.commit();
-//						personaDAO.insertEntity(estudiante);
+						estudianteDAO.insertEntity(estudiante);
 					}else{
 						monitorForm.commit();
+						monitorDAO.insertEntity(monitor);
 					}
 					
 				}

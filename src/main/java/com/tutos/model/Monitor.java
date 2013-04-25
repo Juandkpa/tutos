@@ -8,20 +8,11 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-
-import org.hibernate.annotations.IndexColumn;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 
 @Entity
@@ -41,7 +32,6 @@ public class Monitor extends Persona{
 			"monitor", "materia" }))
 	private List<Materia> materias;
 	
-//	@OneToMany(mappedBy = "monitor", fetch = FetchType.LAZY)
 	@Transient
 	private List<Tutoria> tutorias; 
 	
