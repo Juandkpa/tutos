@@ -72,7 +72,7 @@ public class ShiroBaseRealm extends AuthorizingRealm {
 			throw new AccountException("Null usernames are not allowed by this realm.");
 		}
 		
-		if (!password.equals(upToken.getPassword())) {	
+		if (!password.equals(String.valueOf(upToken.getPassword()))) {	
 			throw new AccountException("Password does not match.");
 		}
 		

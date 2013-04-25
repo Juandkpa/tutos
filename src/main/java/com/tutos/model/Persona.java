@@ -24,8 +24,8 @@ public class Persona {
 	@Column(name = "password")
 	private String password;
 	
-	@Column(name = "edad")
-	private Date edad;
+	@Column(name = "fecha_nacimiento")
+	private Date fechaNacimiento;
 	
 	@Column(name = "telefono")
 	private Integer telefono;
@@ -67,11 +67,11 @@ public class Persona {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Date getEdad() {
-		return edad;
+	public Date getFechaNacimiento() {
+		return fechaNacimiento;
 	}
-	public void setEdad(Date edad) {
-		this.edad = edad;
+	public void setFechaNacimiento(Date edad) {
+		this.fechaNacimiento = edad;
 	}
 	public Integer getTelefono() {
 		return telefono;

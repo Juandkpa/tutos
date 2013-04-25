@@ -42,6 +42,8 @@ public class RegistroEstudiante extends VerticalLayout{
 	    // The Person class is imported from the basic form example.
 	    Estudiante estudiante;
 	    Monitor monitor;
+	    
+	    Button aceptar;
 
 	    private static final String COMMON_FIELD_WIDTH = "12em";
 
@@ -75,18 +77,32 @@ public class RegistroEstudiante extends VerticalLayout{
 				@Override
 				public void valueChange(ValueChangeEvent event) {
 					if(event.getProperty().getValue().equals(datos[0])){
+						
 						removeComponent(monitorForm);
+						removeComponent(aceptar);
+						
 						addComponent(estudianteForm);
+				        setComponentAlignment(estudianteForm, Alignment.MIDDLE_CENTER);
+				        
+				        addComponent(aceptar);
+				        setComponentAlignment(aceptar, Alignment.BOTTOM_CENTER);
+						
 					}else{
 						removeComponent(estudianteForm);
-						addComponent(monitorForm);					
+						removeComponent(aceptar);
+						
+						addComponent(monitorForm);
+				        setComponentAlignment(monitorForm, Alignment.MIDDLE_CENTER);
+				        
+				        addComponent(aceptar);
+				        setComponentAlignment(aceptar, Alignment.BOTTOM_CENTER);
 					}
 					
 				}
 			});
 	       
 
-	        Button aceptar = new Button("Aceptar");
+	        aceptar = new Button("Aceptar");
 	        aceptar.addListener(new ClickListener() {
 				
 				private static final long serialVersionUID = 1L;
@@ -103,10 +119,11 @@ public class RegistroEstudiante extends VerticalLayout{
 							return;
 						}
 						
+						estudianteForm.discard();
+						
 						estudianteDAO.insertEntity(estudiante);
-//						mainWindow.removeAllComponents();
 						mainWindow.removeWindow(RegistroEstudiante.this.getWindow());
-//						mainWindow.addComponent(new Main());
+						mainWindow.showNotification("Registro exitoso.", Notification.TYPE_HUMANIZED_MESSAGE);
 						
 					}else{
 						try{
@@ -116,10 +133,11 @@ public class RegistroEstudiante extends VerticalLayout{
 							return;
 						}
 					
+						monitorForm.discard();
+						
 						monitorDAO.insertEntity(monitor);
-//						mainWindow.removeAllComponents();
 						mainWindow.removeWindow(RegistroEstudiante.this.getWindow());
-//						mainWindow.addComponent(new Main());
+						mainWindow.showNotification("Registro exitoso.", Notification.TYPE_HUMANIZED_MESSAGE);
 					}
 					
 				}
@@ -129,10 +147,10 @@ public class RegistroEstudiante extends VerticalLayout{
 	        addComponent(tipoFormulario);
 	        setComponentAlignment(tipoFormulario, Alignment.TOP_CENTER);
 	        addComponent(estudianteForm);
-	        setComponentAlignment(estudianteForm, Alignment.BOTTOM_CENTER);
+	        setComponentAlignment(estudianteForm, Alignment.MIDDLE_CENTER);
 	        
 	        addComponent(aceptar);
-	        setComponentAlignment(aceptar, Alignment.MIDDLE_CENTER);
+	        setComponentAlignment(aceptar, Alignment.BOTTOM_CENTER);
 	        
 	        setWidth("370px");
 	        setHeight("-1px");
@@ -169,7 +187,7 @@ public class RegistroEstudiante extends VerticalLayout{
 
 	            // Determines which properties are shown, and in which order:
 	            setVisibleItemProperties(Arrays.asList(new String[] { "nombre",
-	                    "edad", "telefono", "correo",
+	                    "fechaNacimiento", "telefono", "correo",
 	                    "centroEducativo", "genero", "infoAcademica", "ubicacion", "password"}));
 
 	        }
@@ -181,7 +199,7 @@ public class RegistroEstudiante extends VerticalLayout{
 	        protected void attachField(Object propertyId, Field field) {
 	            if (propertyId.equals("nombre")) {
 	                ourLayout.addComponent(field, 0, 0);
-	            } else if (propertyId.equals("edad")) {
+	            } else if (propertyId.equals("fechaNacimiento")) {
 	                ourLayout.addComponent(field, 1, 0);
 	            } else if (propertyId.equals("telefono")) {
 	                ourLayout.addComponent(field, 0, 1);
@@ -231,7 +249,7 @@ public class RegistroEstudiante extends VerticalLayout{
 
 	            // Determines which properties are shown, and in which order:
 	            setVisibleItemProperties(Arrays.asList(new String[] { "nombre",
-	                    "edad", "telefono", "correo",
+	                    "fechaNacimiento", "telefono", "correo",
 	                    "centroEducativo", "genero", "password" }));
 
 	        }
@@ -243,7 +261,7 @@ public class RegistroEstudiante extends VerticalLayout{
 	        protected void attachField(Object propertyId, Field field) {
 	            if (propertyId.equals("nombre")) {
 	                ourLayout.addComponent(field, 0, 0);
-	            } else if (propertyId.equals("edad")) {
+	            } else if (propertyId.equals("fechaNacimiento")) {
 	                ourLayout.addComponent(field, 1, 0);
 	            } else if (propertyId.equals("telefono")) {
 	                ourLayout.addComponent(field, 0, 1);
@@ -292,10 +310,10 @@ public class RegistroEstudiante extends VerticalLayout{
 	                tf.setWidth(COMMON_FIELD_WIDTH);
 	                tf.addValidator(new StringLengthValidator(
 	                        "El nombre debe tener entre 10 y 30 caracteres", 10, 30, false));
-	            } else if ("edad".equals(propertyId)) {
+	            } else if ("fechaNacimiento".equals(propertyId)) {
 	                DateField tf = (DateField) f;
 	                tf.setRequired(true);
-	                tf.setRequiredError("Escoja su fecha");
+	                tf.setRequiredError("Escoja su fecha de nacimiento");
 	                tf.setWidth(COMMON_FIELD_WIDTH);
 	            } else if ("telefono".equals(propertyId)) {
 	            	TextField tf = (TextField) f;
@@ -386,10 +404,10 @@ public class RegistroEstudiante extends VerticalLayout{
 	                tf.setWidth(COMMON_FIELD_WIDTH);
 	                tf.addValidator(new StringLengthValidator(
 	                        "El nombre debe tener entre 10 y 30 caracteres", 10, 30, false));
-	            } else if ("edad".equals(propertyId)) {
+	            } else if ("fechaNacimiento".equals(propertyId)) {
 	            	DateField tf = (DateField) f;
 	                tf.setRequired(true);
-	                tf.setRequiredError("Escoja su fecha");
+	                tf.setRequiredError("Escoja su fecha de nacimiento");
 	                tf.setWidth(COMMON_FIELD_WIDTH);
 	            } else if ("telefono".equals(propertyId)) {
 	            	TextField tf = (TextField) f;

@@ -27,10 +27,6 @@ public class LoginScreen extends VerticalLayout
 	{
 		this.app = app;
 
-		// The application caption is shown in the caption bar of the
-		// browser window.
-		this.app.getMainWindow().setCaption("Simple Vaadin Shiro example");
-
 		setSizeFull();
 
 		Panel loginPanel = new Panel("Inicio");
@@ -107,7 +103,7 @@ public class LoginScreen extends VerticalLayout
 				MyVaadinApplication.getInstance().login(username, password);
 
 				// Switch to the protected view
-				app.getMainWindow().setContent(new Main());
+				app.getMainWindow().setContent(new MainPage());
 			}
 			catch (UnknownAccountException uae)
 			{
