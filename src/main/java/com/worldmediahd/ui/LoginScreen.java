@@ -23,7 +23,6 @@ public class LoginScreen extends VerticalLayout
 	private static final long serialVersionUID = 1L;
 	private MyVaadinApplication app;
 
-
 	public LoginScreen(MyVaadinApplication app)
 	{
 		this.app = app;
@@ -57,12 +56,10 @@ public class LoginScreen extends VerticalLayout
 		
 		loginPanel.addComponent(organizador);
 		
-		
+		final Window ventanaCrearCuenta = new Window("Crear cuenta");
 		
 		addComponent(loginPanel);
 		setComponentAlignment(loginPanel, Alignment.TOP_RIGHT);
-		
-		final Window ventanaCrearCuenta = new Window("Crear cuenta");
 		
 		ventanaCrearCuenta.setSizeUndefined();
 		ventanaCrearCuenta.addComponent(crearCuenta);
@@ -74,6 +71,8 @@ public class LoginScreen extends VerticalLayout
 		
 		crear.addListener(new ClickListener() {
 			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
 				getApplication().getMainWindow().addWindow(ventanaCrearCuenta);
@@ -81,9 +80,6 @@ public class LoginScreen extends VerticalLayout
 			}
 		});
 
-//		HorizontalLayout footer = new HorizontalLayout();
-//		footer.setHeight("50px");
-//		addComponent(footer);
 	}
 
 	private static class MyLoginListener implements LoginForm.LoginListener

@@ -2,7 +2,6 @@ package com.worldmediahd.ui;
 
 import com.tutos.dao.EstudianteDAO;
 import com.tutos.dao.MonitorDAO;
-import com.tutos.dao.PersonaDAO;
 import com.tutos.model.Estudiante;
 import com.tutos.model.Genero;
 import com.tutos.model.Monitor;
@@ -30,6 +29,8 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.Window.Notification;
 
 public class RegistroEstudiante extends VerticalLayout{
 
@@ -92,12 +93,33 @@ public class RegistroEstudiante extends VerticalLayout{
 
 				@Override
 				public void buttonClick(ClickEvent event) {
+					Window mainWindow = MyVaadinApplication.getInstance().getMainWindow();
+					
 					if(tipoFormulario.getValue().equals(datos[0])){
-						estudianteForm.commit();
+						try{
+							estudianteForm.commit();
+						}catch(Exception exception){
+							mainWindow.showNotification("Datos Invalidos.", Notification.TYPE_ERROR_MESSAGE);
+							return;
+						}
+						
 						estudianteDAO.insertEntity(estudiante);
+//						mainWindow.removeAllComponents();
+						mainWindow.removeWindow(RegistroEstudiante.this.getWindow());
+//						mainWindow.addComponent(new Main());
+						
 					}else{
-						monitorForm.commit();
+						try{
+							monitorForm.commit();
+						}catch(Exception exception){
+							mainWindow.showNotification("Datos Invalidos.", Notification.TYPE_ERROR_MESSAGE);
+							return;
+						}
+					
 						monitorDAO.insertEntity(monitor);
+//						mainWindow.removeAllComponents();
+						mainWindow.removeWindow(RegistroEstudiante.this.getWindow());
+//						mainWindow.addComponent(new Main());
 					}
 					
 				}

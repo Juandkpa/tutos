@@ -2,8 +2,6 @@
 
 package com.worldmediahd.security;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.shiro.authc.AccountException;
@@ -21,7 +19,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import com.google.common.collect.ImmutableSet;
 import com.tutos.dao.EstudianteDAO;
 import com.tutos.dao.MonitorDAO;
-import com.tutos.dao.PersonaDAO;
 import com.tutos.model.Estudiante;
 import com.tutos.model.Monitor;
 public class ShiroBaseRealm extends AuthorizingRealm {
@@ -75,7 +72,11 @@ public class ShiroBaseRealm extends AuthorizingRealm {
 			throw new AccountException("Null usernames are not allowed by this realm.");
 		}
 		
-		return new SimpleAuthenticationInfo(upToken.getUsername(), upToken.getPassword(), this.getName());
+		if (!password.equals(upToken.getPassword())) {	
+			throw new AccountException("Password does not match.");
+		}
+		
+		return new SimpleAuthenticationInfo(user, password, this.getName());
 	}
 
 	
