@@ -325,8 +325,13 @@ div.v-Notification-error {
 		endColorstr='#f6f6f6', GradientType=0 ); /* IE6-9 */
 }
 
-.wallpaper {
-	background-image:url('http://www.hdpaperz.com/wp-content/gallery/3_wallpaper_01/abstract_wallpaper_09.jpg') !important;
+/* .wallpaper { */
+/* 	background-image:url('http://www.hdpaperz.com/wp-content/gallery/3_wallpaper_01/abstract_wallpaper_09.jpg') !important; */
+/* } */
+
+.full{
+	height:600px;
+	width: 100%;
 }
 
 

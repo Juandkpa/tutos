@@ -1,14 +1,12 @@
 package com.worldmediahd.ui;
 
-import com.tutos.dao.BaseDAO;
-import com.tutos.dao.PersonaDAO;
+import com.tutos.dao.EstudianteDAO;
+import com.tutos.dao.MonitorDAO;
 import com.tutos.model.Estudiante;
 import com.tutos.model.Genero;
 import com.tutos.model.Monitor;
-import com.tutos.model.Persona;
 import com.vaadin.ui.VerticalLayout;
 
-import java.awt.Label;
 import java.util.Arrays;
 
 import com.vaadin.data.Item;
@@ -21,7 +19,6 @@ import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
@@ -32,15 +29,21 @@ import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Window;
+import com.vaadin.ui.Window.Notification;
 
 public class RegistroEstudiante extends VerticalLayout{
 
 		private static final long serialVersionUID = 1L;
-//		private BaseDAO<Persona> personaDAO = new BaseDAO<Persona>(); 
+		
+		private EstudianteDAO estudianteDAO = EstudianteDAO.getInstance();
+		private MonitorDAO monitorDAO = MonitorDAO.getInstance(); 
 	    // the 'POJO' we're editing.
 	    // The Person class is imported from the basic form example.
 	    Estudiante estudiante;
 	    Monitor monitor;
+	    
+	    Button aceptar;
 
 	    private static final String COMMON_FIELD_WIDTH = "12em";
 
@@ -69,30 +72,72 @@ public class RegistroEstudiante extends VerticalLayout{
 	        tipoFormulario.setImmediate(true);
 	        tipoFormulario.addListener(new ValueChangeListener() {
 				
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public void valueChange(ValueChangeEvent event) {
 					if(event.getProperty().getValue().equals(datos[0])){
+						
 						removeComponent(monitorForm);
+						removeComponent(aceptar);
+						
 						addComponent(estudianteForm);
+				        setComponentAlignment(estudianteForm, Alignment.MIDDLE_CENTER);
+				        
+				        addComponent(aceptar);
+				        setComponentAlignment(aceptar, Alignment.BOTTOM_CENTER);
+						
 					}else{
 						removeComponent(estudianteForm);
-						addComponent(monitorForm);					
+						removeComponent(aceptar);
+						
+						addComponent(monitorForm);
+				        setComponentAlignment(monitorForm, Alignment.MIDDLE_CENTER);
+				        
+				        addComponent(aceptar);
+				        setComponentAlignment(aceptar, Alignment.BOTTOM_CENTER);
 					}
 					
 				}
 			});
 	       
 
-	        Button aceptar = new Button("Aceptar");
+	        aceptar = new Button("Aceptar");
 	        aceptar.addListener(new ClickListener() {
 				
+				private static final long serialVersionUID = 1L;
+
 				@Override
 				public void buttonClick(ClickEvent event) {
+					Window mainWindow = MyVaadinApplication.getInstance().getMainWindow();
+					
 					if(tipoFormulario.getValue().equals(datos[0])){
-						estudianteForm.commit();
-//						personaDAO.insertEntity(estudiante);
+						try{
+							estudianteForm.commit();
+						}catch(Exception exception){
+							mainWindow.showNotification("Datos Invalidos.", Notification.TYPE_ERROR_MESSAGE);
+							return;
+						}
+						
+						estudianteForm.discard();
+						
+						estudianteDAO.insertEntity(estudiante);
+						mainWindow.removeWindow(RegistroEstudiante.this.getWindow());
+						mainWindow.showNotification("Registro exitoso.", Notification.TYPE_HUMANIZED_MESSAGE);
+						
 					}else{
-						monitorForm.commit();
+						try{
+							monitorForm.commit();
+						}catch(Exception exception){
+							mainWindow.showNotification("Datos Invalidos.", Notification.TYPE_ERROR_MESSAGE);
+							return;
+						}
+					
+						monitorForm.discard();
+						
+						monitorDAO.insertEntity(monitor);
+						mainWindow.removeWindow(RegistroEstudiante.this.getWindow());
+						mainWindow.showNotification("Registro exitoso.", Notification.TYPE_HUMANIZED_MESSAGE);
 					}
 					
 				}
@@ -102,10 +147,10 @@ public class RegistroEstudiante extends VerticalLayout{
 	        addComponent(tipoFormulario);
 	        setComponentAlignment(tipoFormulario, Alignment.TOP_CENTER);
 	        addComponent(estudianteForm);
-	        setComponentAlignment(estudianteForm, Alignment.BOTTOM_CENTER);
+	        setComponentAlignment(estudianteForm, Alignment.MIDDLE_CENTER);
 	        
 	        addComponent(aceptar);
-	        setComponentAlignment(aceptar, Alignment.MIDDLE_CENTER);
+	        setComponentAlignment(aceptar, Alignment.BOTTOM_CENTER);
 	        
 	        setWidth("370px");
 	        setHeight("-1px");
@@ -142,7 +187,7 @@ public class RegistroEstudiante extends VerticalLayout{
 
 	            // Determines which properties are shown, and in which order:
 	            setVisibleItemProperties(Arrays.asList(new String[] { "nombre",
-	                    "edad", "telefono", "correo",
+	                    "fechaNacimiento", "telefono", "correo",
 	                    "centroEducativo", "genero", "infoAcademica", "ubicacion", "password"}));
 
 	        }
@@ -154,7 +199,7 @@ public class RegistroEstudiante extends VerticalLayout{
 	        protected void attachField(Object propertyId, Field field) {
 	            if (propertyId.equals("nombre")) {
 	                ourLayout.addComponent(field, 0, 0);
-	            } else if (propertyId.equals("edad")) {
+	            } else if (propertyId.equals("fechaNacimiento")) {
 	                ourLayout.addComponent(field, 1, 0);
 	            } else if (propertyId.equals("telefono")) {
 	                ourLayout.addComponent(field, 0, 1);
@@ -204,7 +249,7 @@ public class RegistroEstudiante extends VerticalLayout{
 
 	            // Determines which properties are shown, and in which order:
 	            setVisibleItemProperties(Arrays.asList(new String[] { "nombre",
-	                    "edad", "telefono", "correo",
+	                    "fechaNacimiento", "telefono", "correo",
 	                    "centroEducativo", "genero", "password" }));
 
 	        }
@@ -216,7 +261,7 @@ public class RegistroEstudiante extends VerticalLayout{
 	        protected void attachField(Object propertyId, Field field) {
 	            if (propertyId.equals("nombre")) {
 	                ourLayout.addComponent(field, 0, 0);
-	            } else if (propertyId.equals("edad")) {
+	            } else if (propertyId.equals("fechaNacimiento")) {
 	                ourLayout.addComponent(field, 1, 0);
 	            } else if (propertyId.equals("telefono")) {
 	                ourLayout.addComponent(field, 0, 1);
@@ -265,10 +310,10 @@ public class RegistroEstudiante extends VerticalLayout{
 	                tf.setWidth(COMMON_FIELD_WIDTH);
 	                tf.addValidator(new StringLengthValidator(
 	                        "El nombre debe tener entre 10 y 30 caracteres", 10, 30, false));
-	            } else if ("edad".equals(propertyId)) {
+	            } else if ("fechaNacimiento".equals(propertyId)) {
 	                DateField tf = (DateField) f;
 	                tf.setRequired(true);
-	                tf.setRequiredError("Escoja su fecha");
+	                tf.setRequiredError("Escoja su fecha de nacimiento");
 	                tf.setWidth(COMMON_FIELD_WIDTH);
 	            } else if ("telefono".equals(propertyId)) {
 	            	TextField tf = (TextField) f;
@@ -359,10 +404,10 @@ public class RegistroEstudiante extends VerticalLayout{
 	                tf.setWidth(COMMON_FIELD_WIDTH);
 	                tf.addValidator(new StringLengthValidator(
 	                        "El nombre debe tener entre 10 y 30 caracteres", 10, 30, false));
-	            } else if ("edad".equals(propertyId)) {
+	            } else if ("fechaNacimiento".equals(propertyId)) {
 	            	DateField tf = (DateField) f;
 	                tf.setRequired(true);
-	                tf.setRequiredError("Escoja su fecha");
+	                tf.setRequiredError("Escoja su fecha de nacimiento");
 	                tf.setWidth(COMMON_FIELD_WIDTH);
 	            } else if ("telefono".equals(propertyId)) {
 	            	TextField tf = (TextField) f;

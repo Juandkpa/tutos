@@ -22,8 +22,7 @@ public class Estudiante extends Persona{
 //	@OneToMany(fetch = FetchType.LAZY, targetEntity = Materia.class)
 //	@JoinColumn(name = "materia")
 	@Transient
-	private List<Materia> materias;
-	
+	private List<Materia> materias;	
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "monitor_estudiante", joinColumns = @JoinColumn(name = "monitor"), inverseJoinColumns = @JoinColumn(name = "estudiante"), uniqueConstraints = @UniqueConstraint(columnNames = {

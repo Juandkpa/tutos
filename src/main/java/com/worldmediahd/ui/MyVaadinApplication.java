@@ -24,7 +24,6 @@ import org.apache.shiro.subject.Subject;
 import com.vaadin.Application;
 import com.vaadin.service.ApplicationContext;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Window;
 import com.worldmediahd.services.UIControllerService;
@@ -60,14 +59,15 @@ public class MyVaadinApplication extends Application implements ApplicationConte
         
 		this.getContext().addTransactionListener(this);
 
-		this.mainWindow = new Window("My Vaadin Application");
+		this.mainWindow = new Window("Tutos");
 
 		this.setMainWindow(mainWindow);
 
 		mainWindow.setContent(new LoginScreen(this));
+	//	mainWindow.setContent(new MainPage());
 		//mainWindow.setContent(new RegistroEstudiante());
 		//mainWindow.setContent(new main());
-		
+		setTheme("wmhd");
 		
 	}
 

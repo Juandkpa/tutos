@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="tutosM" transaction-type="RESOURCE_LOCAL">
 		
-		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<provider>org.apache.openjpa.persistence.PresistenceProviderImpl</provider>
 		
 <!-- 		<class>com.tutos.model.Estudiante</class> -->
 <!-- 		<class>com.tutos.model.Materia</class> -->
@@ -13,15 +13,9 @@
 <!-- 		<class>com.tutos.model.Tutoria</class> -->
 		
 		<properties>
-			<property name="hibernate.connection.driver_class" value="org.apache.derby.jdbc.EmbeddedDriver" />
-			<property name="hibernate.connection.url" value="jdbc:derby:tutosDB;create=true " />
-			<property name="hibernate.connection.username" value="" />
-			<property name="hibernate.connection.password" value="" />
-			<property name="hibernate.autoReconnect" value="true" />
-			<property name="hibernatespatial.dialect" value="org.hibernate.dialect.DerbyDialect" />
-			<property name="hibernate.hbm2ddl.auto" value="update" />
-			<property name="hibernate.archive.autodetection" value="class" />
-			<property name="hibernate.show_sql" value="true" />
+			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
+			<property name="openjpa.ConnectionURL" value="jdbc:derby:testdb;create=true" />
+			<property name="openjpa.ConnectionDriverName" value="org.apache.derby.jdbc.EmbeddedDriver" />
 		</properties>
 	</persistence-unit>
 </persistence>

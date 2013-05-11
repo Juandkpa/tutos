@@ -2,8 +2,6 @@
 
 package com.worldmediahd.security;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.shiro.authc.AccountException;
@@ -19,15 +17,21 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
 import com.google.common.collect.ImmutableSet;
+import com.tutos.dao.EstudianteDAO;
+import com.tutos.dao.MonitorDAO;
+import com.tutos.model.Estudiante;
+import com.tutos.model.Monitor;
 public class ShiroBaseRealm extends AuthorizingRealm {
 	
-	static Map<String, String> usersTokens = new HashMap<String, String>();
+//	static Map<String, String> usersTokens = new HashMap<String, String>();
+	private EstudianteDAO estudianteDAO = EstudianteDAO.getInstance(); 
+	private MonitorDAO monitorDAO = MonitorDAO.getInstance(); 
 	
 	public ShiroBaseRealm() {
 		super();
-		usersTokens.put("admin", "admin");
-		usersTokens.put("user", "user");
-		usersTokens.put("demo", "demo");
+//		usersTokens.put("admin", "admin");
+//		usersTokens.put("user", "user");
+//		usersTokens.put("demo", "demo");
 	}
 	
 	@Override
@@ -46,13 +50,33 @@ public class ShiroBaseRealm extends AuthorizingRealm {
 		UsernamePasswordToken upToken = (UsernamePasswordToken) token;
 
 		String user = upToken.getUsername();
-		String password = usersTokens.get(user);
+		
+		String password = null;
+		
+		for(Estudiante estudiante: estudianteDAO.getAll()){
+			if(estudiante.getCorreo().equals(user)){
+				password = estudiante.getPassword();
+				break;
+			}
+		}
+		
+		for(Monitor monitor: monitorDAO.getAll()){
+			if(monitor.getCorreo().equals(user)){
+				password = monitor.getPassword();
+				break;
+			}
+		}
+		 
 
 		if (password == null) {	
 			throw new AccountException("Null usernames are not allowed by this realm.");
 		}
 		
-		return new SimpleAuthenticationInfo(upToken.getUsername(), upToken.getPassword(), this.getName());
+		if (!password.equals(String.valueOf(upToken.getPassword()))) {	
+			throw new AccountException("Password does not match.");
+		}
+		
+		return new SimpleAuthenticationInfo(user, password, this.getName());
 	}
 
 	
